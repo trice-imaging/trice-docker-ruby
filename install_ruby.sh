@@ -48,7 +48,7 @@ cd /tmp/fuseinstall ; rm fuse_*.deb
 cd /tmp/fuseinstall ; echo -en '#!/bin/bash\nexit 0\n' > DEBIAN/postinst
 cd /tmp/fuseinstall ; dpkg-deb -b . /fuse.deb
 cd /tmp/fuseinstall ; dpkg -i /fuse.deb
-
+cd /
 rm -rf /tmp/fuseinstall
 
 add-apt-repository ppa:webupd8team/java -y
