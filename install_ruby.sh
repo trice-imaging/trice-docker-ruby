@@ -1,5 +1,43 @@
 #!/bin/bash
 
+cd /usr/local
+test -e /usr/local/rbenv || git clone https://github.com/sstephenson/rbenv.git
+cat << EOF > /etc/profile.d/rbenv.sh
+export PATH="/usr/local/rbenv/bin:\$PATH"
+export RBENV_ROOT=/usr/local/rbenv
+eval "\$(rbenv init -)"
+upgrade_rbenv()
+{
+        pushd /usr/local/rbenv
+        git pull
+        popd
+        pushd /usr/local/rbenv/plugins/ruby-build
+        git pull
+        popd
+}
+EOF
+
+mkdir -p rbenv/plugins
+test -e /usr/local/rbenv/plugins/ruby-build || git clone https://github.com/sstephenson/ruby-build.git rbenv/plugins/ruby-build
+
+echo 'export PATH="/usr/local/rbenv/plugins/ruby-build/bin:$PATH"' > /etc/profile.d/ruby-build.sh
+
+cat << EOF > /etc/profile.d/jruby.sh
+jruby_client()
+{
+  export JRUBY_OPTS="--1.9 -J-noverify -Xcompile.invokedynamic=false -J-Dfile.encoding=UTF8 -J-Xms512m -J-Xmx2048m -J-XX:+TieredCompilation -J-XX:TieredStopAtLevel=1 -J-XX:+UseCompressedOops --server"
+}
+
+jruby_server()
+{
+  export JRUBY_OPTS="--1.9 -J-noverify -Xcompile.invokedynamic=false -J-Dfile.encoding=UTF8 -J-Xms512m -J-Xmx4096m -J-XX:+TieredCompilation -J-XX:+UseCompressedOops --server"
+}
+EOF
+
+chmod +x /etc/profile.d/ruby-build.sh
+chmod +x /etc/profile.d/rbenv.sh
+chmod +x /etc/profile.d/jruby.sh
+
 # Fake a fuse install - for java install
 apt-get install --force-yes -y -q adduser libfuse2
 mkdir -p /tmp/fuseinstall
