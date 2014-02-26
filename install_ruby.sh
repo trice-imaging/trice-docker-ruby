@@ -63,9 +63,31 @@ upgrade_rbenv
 test -e /usr/local/rbenv/versions/$RBENV_JRUBY || rbenv install $RBENV_JRUBY
 test -e /usr/local/rbenv/versions/$RBENV_MRI || rbenv install $RBENV_MRI
 
+## Regardless of version, these two will always work
+ln -s /usr/local/rbenv/versions/$RBENV_JRUBY /usr/local/rbenv/versions/jruby
+ln -s /usr/local/rbenv/versions/$RBENV_MRI /usr/local/rbenv/versions/mri
+
 jruby_client
 rbenv shell $RBENV_JRUBY
 gem install bundler --no-ri --no-rdoc
 
 rbenv shell $RBENV_MRI
 gem install bundler --no-ri --no-rdoc
+
+useradd -U $USER
+
+groupadd rbenv
+
+adduser $USER rbenv
+
+chown -R $USER:rbenv /usr/local/rbenv
+chmod -R ug+rwx /usr/local/rbenv
+
+## allow passwordless sudo
+
+cat << EOF > /etc/sudoers.d/100-allow-app-user
+$USER ALL=(ALL) NOPASSWD:ALL
+EOF
+
+chown root:root /etc/sudoers.d/100-allow-app-user
+chmod 0440 /etc/sudoers.d/100-allow-app-user
