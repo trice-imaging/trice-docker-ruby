@@ -38,6 +38,9 @@ chmod +x /etc/profile.d/ruby-build.sh
 chmod +x /etc/profile.d/rbenv.sh
 chmod +x /etc/profile.d/jruby.sh
 
+# Install zmq3
+apt-get install --force-yes -y -q libzmq3 libzmq3-dev
+
 # Fake a fuse install - for java install
 apt-get install --force-yes -y -q adduser libfuse2
 mkdir -p /tmp/fuseinstall
