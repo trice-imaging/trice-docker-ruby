@@ -1,4 +1,4 @@
-FROM johnae/trice-docker-app-base:latest
+FROM triceio/trice-docker-app-base:latest
 MAINTAINER John Axel Eriksson <john@insane.se>
 
 ENV DEBIAN_FRONTEND noninteractive
